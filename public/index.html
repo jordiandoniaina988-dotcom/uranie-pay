@@ -5,43 +5,71 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Achat Sécurisé — Fichier Numérique</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a0a0f;
-    --surface: #12121a;
-    --border: #1e1e2e;
-    --accent: #00e5a0;
-    --accent2: #7c3aed;
-    --warn: #f59e0b;
-    --danger: #ef4444;
-    --text: #e8e8f0;
-    --muted: #6b6b80;
-    --glow: 0 0 40px rgba(0,229,160,0.15);
+    --blue-50:  #e6f1fb;
+    --blue-100: #b5d4f4;
+    --blue-200: #85b7eb;
+    --blue-400: #378add;
+    --blue-500: #1e6fc2;
+    --blue-600: #185fa5;
+    --blue-800: #0c447c;
+    --blue-900: #042c53;
+    --bg:       #04111f;
+    --bg2:      #071828;
+    --bg3:      #0a2035;
+    --surface:  #0d2540;
+    --surface2: #102d4a;
+    --border:   rgba(55,138,221,0.18);
+    --border2:  rgba(55,138,221,0.35);
+    --text:     #e8f4ff;
+    --muted:    #7aadda;
+    --muted2:   #4a85b8;
+    --accent:   #378add;
+    --accent2:  #5fa8f5;
+    --success:  #1d9e75;
+    --danger:   #e24b4a;
+    --warn:     #ef9f27;
+    --glow:     0 0 60px rgba(55,138,221,0.12);
+    --card-shadow: 0 4px 32px rgba(4,17,31,0.6), 0 1px 0 rgba(55,138,221,0.1) inset;
   }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'Syne', sans-serif;
+    font-family: 'Inter', sans-serif;
     min-height: 100vh;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
+    padding: 48px 16px 80px;
     overflow-x: hidden;
   }
 
+  /* ── Ambient background ── */
   body::before {
     content: '';
     position: fixed;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(ellipse at 60% 20%, rgba(124,58,237,0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 20% 80%, rgba(0,229,160,0.06) 0%, transparent 40%);
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(55,138,221,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 80% 80%, rgba(24,95,165,0.08) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── Grid lines ── */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(55,138,221,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(55,138,221,0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
     pointer-events: none;
     z-index: 0;
   }
@@ -50,55 +78,148 @@
     position: relative;
     z-index: 1;
     width: 100%;
-    max-width: 480px;
-    padding: 24px;
+    max-width: 520px;
   }
 
   /* ── Header ── */
   .header {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 48px;
   }
+
+  .logo-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px; height: 64px;
+    background: linear-gradient(135deg, var(--blue-600), var(--blue-400));
+    border-radius: 18px;
+    margin-bottom: 24px;
+    box-shadow: 0 8px 32px rgba(55,138,221,0.35);
+    position: relative;
+  }
+
+  .logo-wrap svg { width: 28px; height: 28px; }
 
   .badge {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    background: rgba(0,229,160,0.1);
-    border: 1px solid rgba(0,229,160,0.3);
+    gap: 7px;
+    background: rgba(55,138,221,0.1);
+    border: 1px solid rgba(55,138,221,0.25);
     border-radius: 100px;
-    padding: 6px 14px;
+    padding: 5px 14px;
     font-size: 11px;
-    font-family: 'DM Mono', monospace;
-    color: var(--accent);
-    letter-spacing: 0.08em;
+    font-family: 'Space Grotesk', sans-serif;
+    color: var(--accent2);
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     margin-bottom: 20px;
   }
 
-  .badge::before { content: '●'; font-size: 8px; animation: pulse 2s infinite; }
+  .badge-dot {
+    width: 6px; height: 6px;
+    background: var(--accent2);
+    border-radius: 50%;
+    animation: pulse 2.4s ease infinite;
+  }
 
   @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.7); }
   }
 
   h1 {
-    font-size: 32px;
-    font-weight: 800;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
     line-height: 1.1;
-    background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+    letter-spacing: -0.02em;
+    background: linear-gradient(160deg, #ffffff 30%, var(--blue-200) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
   }
 
   .subtitle {
     color: var(--muted);
     font-size: 14px;
     font-weight: 400;
+    line-height: 1.6;
   }
+
+  /* ── Progress track ── */
+  .progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 32px;
+    padding: 0 8px;
+  }
+
+  .progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+    position: relative;
+  }
+
+  .progress-step::after {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: calc(50% + 18px);
+    right: calc(-50% + 18px);
+    height: 1px;
+    background: var(--border);
+    transition: background 0.4s;
+  }
+
+  .progress-step:last-child::after { display: none; }
+  .progress-step.done::after { background: var(--blue-600); }
+
+  .step-circle {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border2);
+    background: var(--surface);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted2);
+    transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+    font-family: 'Space Grotesk', sans-serif;
+    z-index: 1;
+  }
+
+  .progress-step.active .step-circle {
+    background: var(--blue-600);
+    border-color: var(--blue-400);
+    color: #fff;
+    box-shadow: 0 0 20px rgba(55,138,221,0.5);
+  }
+
+  .progress-step.done .step-circle {
+    background: var(--success);
+    border-color: var(--success);
+    color: #fff;
+  }
+
+  .step-label-text {
+    font-size: 10px;
+    color: var(--muted2);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: color 0.3s;
+  }
+
+  .progress-step.active .step-label-text { color: var(--accent2); }
+  .progress-step.done .step-label-text { color: var(--muted); }
 
   /* ── Card ── */
   .card {
@@ -107,244 +228,447 @@
     border-radius: 20px;
     padding: 28px;
     margin-bottom: 16px;
-    transition: all 0.3s ease;
+    box-shadow: var(--card-shadow);
+    transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(55,138,221,0.4), transparent);
+    opacity: 0;
+    transition: opacity 0.35s;
   }
 
   .card.active {
-    border-color: rgba(0,229,160,0.4);
-    box-shadow: var(--glow);
+    border-color: rgba(55,138,221,0.4);
+    background: var(--surface2);
+    box-shadow: var(--glow), var(--card-shadow);
   }
 
-  .card.dimmed { opacity: 0.4; pointer-events: none; }
+  .card.active::before { opacity: 1; }
 
-  .step-label {
+  .card.dimmed {
+    opacity: 0.38;
+    pointer-events: none;
+    transform: scale(0.99);
+  }
+
+  /* ── Step label ── */
+  .step-header {
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 11px;
-    font-family: 'DM Mono', monospace;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 16px;
-  }
-
-  .step-num {
-    width: 22px; height: 22px;
-    background: var(--border);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 11px;
-    color: var(--muted);
-    flex-shrink: 0;
-    transition: all 0.3s;
-  }
-
-  .active .step-num {
-    background: var(--accent);
-    color: #000;
-  }
-
-  /* Product info */
-  .product-info {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 16px;
-    background: rgba(255,255,255,0.03);
-    border-radius: 12px;
     margin-bottom: 20px;
   }
 
-  .product-icon {
-    width: 48px; height: 48px;
-    background: linear-gradient(135deg, var(--accent2), var(--accent));
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px;
-    flex-shrink: 0;
+  .step-tag {
+    font-size: 10px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    background: rgba(55,138,221,0.12);
+    border: 1px solid rgba(55,138,221,0.2);
+    border-radius: 6px;
+    padding: 3px 9px;
   }
 
-  .product-name { font-size: 15px; font-weight: 600; margin-bottom: 3px; }
-
-  .product-price {
-    font-family: 'DM Mono', monospace;
-    font-size: 20px;
-    font-weight: 500;
-    color: var(--accent);
-  }
-
-  /* Buttons */
-  .btn {
-    width: 100%;
-    padding: 15px 24px;
-    border-radius: 12px;
-    border: none;
-    font-family: 'Syne', sans-serif;
+  .step-title {
     font-size: 15px;
     font-weight: 600;
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+  }
+
+  /* ── Product card ── */
+  .product-box {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: rgba(55,138,221,0.07);
+    border: 1px solid rgba(55,138,221,0.15);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+
+  .product-icon-wrap {
+    width: 52px; height: 52px;
+    background: linear-gradient(135deg, var(--blue-800), var(--blue-600));
+    border-radius: 13px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 16px rgba(4,44,83,0.5);
+  }
+
+  .product-icon-wrap svg { width: 24px; height: 24px; }
+
+  .product-meta { flex: 1; }
+  .product-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .product-desc { font-size: 12px; color: var(--muted); }
+
+  .product-price {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent2);
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+  }
+
+  .product-price span {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    display: block;
+    text-align: right;
+  }
+
+  /* ── Buttons ── */
+  .btn {
+    width: 100%;
+    padding: 14px 24px;
+    border-radius: 12px;
+    border: none;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    text-decoration: none;
+    letter-spacing: 0.01em;
   }
 
   .btn-primary {
-    background: linear-gradient(135deg, var(--accent), #00b87a);
-    color: #000;
+    background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-400) 100%);
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(55,138,221,0.3), 0 1px 0 rgba(255,255,255,0.1) inset;
   }
-  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,229,160,0.3); }
-  .btn-primary:active { transform: translateY(0); }
+
+  .btn-primary:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 28px rgba(55,138,221,0.45), 0 1px 0 rgba(255,255,255,0.1) inset;
+    background: linear-gradient(135deg, var(--blue-400) 0%, var(--accent2) 100%);
+  }
+
+  .btn-primary:active:not(:disabled) { transform: translateY(0); }
 
   .btn-secondary {
-    background: var(--border);
-    color: var(--text);
+    background: var(--surface2);
+    color: var(--muted);
+    border: 1px solid var(--border);
   }
-  .btn-secondary:hover { background: #252535; }
 
-  .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
+  .btn-secondary:hover:not(:disabled) {
+    background: rgba(55,138,221,0.1);
+    color: var(--text);
+    border-color: var(--border2);
+  }
 
-  /* Upload zone */
+  .btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none !important; }
+
+  /* ── Upload zone ── */
   .upload-zone {
-    border: 2px dashed var(--border);
-    border-radius: 12px;
-    padding: 32px 20px;
+    border: 1.5px dashed rgba(55,138,221,0.25);
+    border-radius: 14px;
+    padding: 36px 20px;
     text-align: center;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.25s;
     margin-bottom: 16px;
     position: relative;
+    background: rgba(55,138,221,0.03);
   }
 
   .upload-zone:hover, .upload-zone.dragover {
     border-color: var(--accent);
-    background: rgba(0,229,160,0.05);
+    background: rgba(55,138,221,0.08);
   }
 
   .upload-zone input {
-    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%;
+    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
   }
 
-  .upload-icon { font-size: 36px; margin-bottom: 10px; }
-  .upload-text { font-size: 14px; color: var(--muted); }
-  .upload-text strong { color: var(--accent); }
+  .upload-icon-wrap {
+    width: 48px; height: 48px;
+    background: rgba(55,138,221,0.1);
+    border: 1px solid rgba(55,138,221,0.2);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 12px;
+  }
+
+  .upload-icon-wrap svg { width: 22px; height: 22px; }
+
+  .upload-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+
+  .upload-hint { font-size: 12px; color: var(--muted); }
+  .upload-hint strong { color: var(--accent2); }
 
   .preview-img {
     width: 100%;
-    max-height: 180px;
+    max-height: 200px;
     object-fit: cover;
-    border-radius: 10px;
+    border-radius: 12px;
     margin-bottom: 16px;
     display: none;
+    border: 1px solid var(--border);
   }
 
-  /* Status section */
+  /* ── Status boxes ── */
   .status-box {
-    padding: 16px;
     border-radius: 12px;
+    padding: 16px;
     display: flex;
-    align-items: center;
-    gap: 12px;
+    align-items: flex-start;
+    gap: 14px;
     margin-bottom: 16px;
+    border: 1px solid;
   }
 
-  .status-box.analyzing { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); }
-  .status-box.validated { background: rgba(0,229,160,0.1); border: 1px solid rgba(0,229,160,0.3); }
-  .status-box.rejected  { background: rgba(239,68,68,0.1);  border: 1px solid rgba(239,68,68,0.3); }
+  .status-box.analyzing {
+    background: rgba(239,159,39,0.07);
+    border-color: rgba(239,159,39,0.25);
+  }
 
-  .status-icon { font-size: 24px; flex-shrink: 0; }
+  .status-box.validated {
+    background: rgba(29,158,117,0.08);
+    border-color: rgba(29,158,117,0.3);
+  }
 
-  .status-title { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
-  .status-desc  { font-size: 12px; color: var(--muted); }
+  .status-box.rejected {
+    background: rgba(226,75,74,0.07);
+    border-color: rgba(226,75,74,0.25);
+  }
 
-  /* Spinner */
+  .status-box.error-box {
+    background: rgba(239,159,39,0.07);
+    border-color: rgba(239,159,39,0.25);
+  }
+
+  .status-icon-wrap {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .analyzing .status-icon-wrap { background: rgba(239,159,39,0.15); }
+  .validated .status-icon-wrap { background: rgba(29,158,117,0.15); }
+  .rejected  .status-icon-wrap { background: rgba(226,75,74,0.12); }
+  .error-box .status-icon-wrap { background: rgba(239,159,39,0.15); }
+
+  .status-content-title {
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Space Grotesk', sans-serif;
+    margin-bottom: 3px;
+  }
+
+  .analyzing .status-content-title { color: var(--warn); }
+  .validated .status-content-title { color: #2dd4a4; }
+  .rejected  .status-content-title { color: #f87171; }
+  .error-box .status-content-title { color: var(--warn); }
+
+  .status-content-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* ── Spinner ── */
   .spinner {
-    width: 20px; height: 20px;
-    border: 2px solid var(--border);
+    width: 18px; height: 18px;
+    border: 2px solid rgba(239,159,39,0.2);
     border-top-color: var(--warn);
     border-radius: 50%;
-    animation: spin 0.8s linear infinite;
+    animation: spin 0.75s linear infinite;
     flex-shrink: 0;
   }
 
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* Progress dots */
-  .dots { display: inline-block; }
   .dots::after {
     content: '';
-    animation: dots 1.5s infinite;
+    animation: dots 1.4s steps(4, end) infinite;
   }
   @keyframes dots {
-    0%   { content: ''; }
-    33%  { content: '.'; }
-    66%  { content: '..'; }
-    100% { content: '...'; }
+    0%  { content: ''; }
+    25% { content: '.'; }
+    50% { content: '..'; }
+    75%, 100% { content: '...'; }
   }
 
-  /* Step indicator */
-  .steps-track {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 28px;
-    justify-content: center;
+  /* ── Info rows ── */
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 16px;
   }
 
-  .track-dot {
-    height: 3px;
-    border-radius: 100px;
-    flex: 1;
-    background: var(--border);
-    transition: background 0.3s;
+  .info-cell {
+    background: rgba(55,138,221,0.05);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 12px;
   }
 
-  .track-dot.done { background: var(--accent); }
-  .track-dot.active { background: linear-gradient(90deg, var(--accent), var(--accent2)); }
-
-  .info-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 13px;
+  .info-cell-label {
+    font-size: 10px;
+    color: var(--muted2);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 500;
+    margin-bottom: 4px;
   }
 
-  .info-row:last-child { border-bottom: none; }
-  .info-row .label { color: var(--muted); }
-  .info-row .value { font-family: 'DM Mono', monospace; font-size: 12px; }
-
-  /* Success animation */
-  @keyframes floatUp {
-    0% { transform: translateY(10px); opacity: 0; }
-    100% { transform: translateY(0); opacity: 1; }
-  }
-
-  .success-card {
-    animation: floatUp 0.5s ease forwards;
-    text-align: center;
-    padding: 32px;
-  }
-
-  .success-checkmark {
-    width: 64px; height: 64px;
-    background: linear-gradient(135deg, var(--accent), #00b87a);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 28px;
-    margin: 0 auto 20px;
-    box-shadow: 0 0 40px rgba(0,229,160,0.4);
-  }
-
-  .error-msg {
-    color: var(--danger);
+  .info-cell-value {
     font-size: 12px;
-    margin-top: 8px;
-    font-family: 'DM Mono', monospace;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* ── Error message ── */
+  .error-msg {
+    font-size: 12px;
+    color: #f87171;
+    margin-top: 10px;
+    padding: 10px 14px;
+    background: rgba(226,75,74,0.08);
+    border: 1px solid rgba(226,75,74,0.2);
+    border-radius: 8px;
     display: none;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+
+  /* ── Security badges ── */
+  .security-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .sec-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--muted2);
+  }
+
+  .sec-badge svg { width: 13px; height: 13px; opacity: 0.7; }
+
+  /* ── AI badge ── */
+  .ai-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--muted2);
+    margin-top: 8px;
+  }
+
+  .ai-dot {
+    width: 6px; height: 6px;
+    background: var(--accent2);
+    border-radius: 50%;
+    animation: pulse 1.8s ease infinite;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card { animation: fadeUp 0.4s ease both; }
+  .card:nth-child(1) { animation-delay: 0.05s; }
+  .card:nth-child(2) { animation-delay: 0.12s; }
+  .card:nth-child(3) { animation-delay: 0.2s; }
+
+  /* ── Responsive ── */
+
+  /* Tablette (≤600px) */
+  @media (max-width: 600px) {
+    body { padding: 32px 12px 64px; }
+
+    h1 { font-size: 28px; }
+    .subtitle { font-size: 13px; }
+
+    .logo-wrap { width: 54px; height: 54px; border-radius: 14px; margin-bottom: 18px; }
+    .header { margin-bottom: 32px; }
+
+    .card { padding: 20px 18px; border-radius: 16px; }
+
+    .product-box { gap: 12px; padding: 13px; }
+    .product-icon-wrap { width: 44px; height: 44px; border-radius: 11px; flex-shrink: 0; }
+    .product-name { font-size: 13px; }
+    .product-price { font-size: 18px; }
+
+    .btn { padding: 13px 18px; font-size: 13px; }
+
+    .security-row { gap: 12px; flex-wrap: wrap; }
+    .sec-badge { font-size: 10px; }
+  }
+
+  /* Mobile (≤400px) */
+  @media (max-width: 400px) {
+    body { padding: 24px 10px 56px; }
+
+    h1 { font-size: 24px; }
+    .badge { font-size: 10px; padding: 4px 11px; }
+
+    .card { padding: 16px 14px; }
+
+    /* Product box passe en colonne sur très petit écran */
+    .product-box {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .product-price { align-self: flex-end; }
+
+    .step-label-text { font-size: 9px; }
+    .step-circle { width: 26px; height: 26px; font-size: 10px; }
+    .progress-step::after { top: 13px; }
+
+    .security-row {
+      flex-direction: column;
+      gap: 10px;
+      align-items: flex-start;
+      padding-left: 8px;
+    }
+
+    .info-grid { grid-template-columns: 1fr; }
+
+    .upload-zone { padding: 24px 14px; }
+    .upload-icon-wrap { width: 40px; height: 40px; }
+    .upload-title { font-size: 13px; }
   }
 </style>
 </head>
@@ -352,127 +676,192 @@
 
 <div class="container">
 
+  <!-- ── Header ── -->
   <div class="header">
-    <div class="badge">Vérification par IA · Groq Llama 4</div>
+    <div class="logo-wrap">
+      <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14 3L24 8.5V19.5L14 25L4 19.5V8.5L14 3Z" stroke="white" stroke-width="1.5" stroke-linejoin="round"/>
+        <path d="M14 3V25M4 8.5L24 19.5M24 8.5L4 19.5" stroke="rgba(255,255,255,0.35)" stroke-width="1"/>
+        <circle cx="14" cy="14" r="3" fill="white"/>
+      </svg>
+    </div>
+    <div>
+      <div class="badge"><div class="badge-dot"></div> Paiement sécurisé · IA intégrée</div>
+    </div>
     <h1>Téléchargement<br>Numérique</h1>
-    <p class="subtitle">Payez, prouvez, téléchargez — vérifié par IA</p>
+    <p class="subtitle">Payez via MVola ou Orange Money,<br>votre accès est vérifié par IA en quelques secondes.</p>
   </div>
 
-  <!-- Progress track -->
-  <div class="steps-track">
-    <div class="track-dot active" id="track1"></div>
-    <div class="track-dot" id="track2"></div>
-    <div class="track-dot" id="track3"></div>
+  <!-- ── Progress ── -->
+  <div class="progress-wrap">
+    <div class="progress-step active" id="ps1">
+      <div class="step-circle" id="sc1">1</div>
+      <div class="step-label-text">Paiement</div>
+    </div>
+    <div class="progress-step" id="ps2">
+      <div class="step-circle" id="sc2">2</div>
+      <div class="step-label-text">Preuve</div>
+    </div>
+    <div class="progress-step" id="ps3">
+      <div class="step-circle" id="sc3">3</div>
+      <div class="step-label-text">Accès</div>
+    </div>
   </div>
 
-  <!-- ── STEP 1: Paiement ── -->
+  <!-- ── STEP 1 ── -->
   <div class="card active" id="card-step1">
-    <div class="step-label">
-      <div class="step-num">1</div>
-      Effectuer le paiement
+    <div class="step-header">
+      <div class="step-tag">Étape 01</div>
+      <div class="step-title">Effectuer le paiement</div>
     </div>
 
-    <div class="product-info">
-      <div class="product-icon">📄</div>
-      <div>
+    <div class="product-box">
+      <div class="product-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10 9 9 9 8 9"/>
+        </svg>
+      </div>
+      <div class="product-meta">
         <div class="product-name">Fichier Numérique Premium</div>
-        <div class="product-price">5 000 Ar</div>
+        <div class="product-desc">Accès instantané après paiement</div>
+      </div>
+      <div class="product-price">
+        5 000
+        <span>Ariary</span>
       </div>
     </div>
 
     <button class="btn btn-primary" id="btn-pay" onclick="startPayment()">
-      📱 Payer via MVola / Orange Money
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18"/></svg>
+      Payer via MVola / Orange Money
     </button>
-    <p style="text-align:center; font-size:11px; color:var(--muted); margin-top:10px;">
-      Appuie le bouton — ton téléphone composera automatiquement le code USSD
+    <p style="text-align:center; font-size:11px; color:var(--muted2); margin-top:10px; line-height:1.5;">
+      Le code USSD sera composé automatiquement sur votre téléphone
     </p>
   </div>
 
-  <!-- ── STEP 2: Preuve de paiement ── -->
+  <!-- ── STEP 2 ── -->
   <div class="card dimmed" id="card-step2">
-    <div class="step-label">
-      <div class="step-num">2</div>
-      Envoyer la preuve de paiement
+    <div class="step-header">
+      <div class="step-tag">Étape 02</div>
+      <div class="step-title">Envoyer la preuve de paiement</div>
     </div>
 
-    <img id="preview" class="preview-img" src="" alt="Aperçu">
+    <img id="preview" class="preview-img" src="" alt="Aperçu capture">
 
     <div class="upload-zone" id="upload-zone">
       <input type="file" id="file-input" accept="image/*" onchange="handleFile(this)">
-      <div class="upload-icon">🖼️</div>
-      <div class="upload-text">
-        <strong>Clique ou glisse</strong> ta capture d'écran ici<br>
-        <span style="font-size:11px;">JPG, PNG — max 10MB</span>
+      <div class="upload-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/>
+          <path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/>
+        </svg>
       </div>
+      <div class="upload-title">Glisse ta capture ici</div>
+      <div class="upload-hint"><strong>ou clique pour choisir</strong> · JPG, PNG · max 10MB</div>
     </div>
 
     <button class="btn btn-primary" id="btn-submit" onclick="submitProof()" disabled>
-      🤖 Envoyer pour analyse IA
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      Analyser par IA
     </button>
+
+    <div style="text-align:center; margin-top:10px;">
+      <span class="ai-badge"><div class="ai-dot"></div> Vérification automatique par Groq Llama 4</span>
+    </div>
+
     <p class="error-msg" id="error-msg"></p>
   </div>
 
-  <!-- ── STEP 3: Vérification & Téléchargement ── -->
+  <!-- ── STEP 3 ── -->
   <div class="card dimmed" id="card-step3">
-    <div class="step-label">
-      <div class="step-num">3</div>
-      Analyse IA & Téléchargement
+    <div class="step-header">
+      <div class="step-tag">Étape 03</div>
+      <div class="step-title">Analyse IA &amp; Téléchargement</div>
     </div>
 
-    <!-- Statut: analyzing -->
+    <!-- Analyzing -->
     <div class="status-box analyzing" id="status-analyzing" style="display:none;">
-      <div class="spinner"></div>
+      <div class="spinner" style="margin-top:8px;"></div>
+      <div class="status-icon-wrap" style="display:none;"></div>
       <div>
-        <div class="status-title">Analyse IA en cours<span class="dots"></span></div>
-        <div class="status-desc">Groq Llama 4 vérifie ton paiement automatiquement…</div>
+        <div class="status-content-title">Analyse en cours<span class="dots"></span></div>
+        <div class="status-content-desc">Groq Llama 4 vérifie ton paiement automatiquement. Cela prend 1 à 3 secondes.</div>
       </div>
     </div>
 
-    <!-- Statut: validé -->
+    <!-- Validated -->
     <div class="status-box validated" id="status-validated" style="display:none;">
-      <div class="status-icon">✅</div>
+      <div class="status-icon-wrap">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2dd4a4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
       <div>
-        <div class="status-title">Paiement confirmé !</div>
-        <div class="status-desc">Ton téléchargement démarre automatiquement…</div>
+        <div class="status-content-title">Paiement confirmé !</div>
+        <div class="status-content-desc">Ton paiement a été validé. Le téléchargement démarre automatiquement…</div>
       </div>
     </div>
 
-    <!-- Statut: rejeté -->
+    <!-- Rejected -->
     <div class="status-box rejected" id="status-rejected" style="display:none;">
-      <div class="status-icon">❌</div>
+      <div class="status-icon-wrap">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </div>
       <div>
-        <div class="status-title">Paiement non reconnu</div>
-        <div class="status-desc">La capture ne correspond pas. Réessaie avec la bonne image.</div>
+        <div class="status-content-title">Paiement non reconnu</div>
+        <div class="status-content-desc">La capture ne correspond pas au montant attendu. Vérifie et réessaie.</div>
       </div>
     </div>
 
-    <!-- Statut: erreur technique -->
-    <div class="status-box" id="status-error" style="display:none; background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3);">
-      <div class="status-icon">⚠️</div>
+    <!-- Error -->
+    <div class="status-box error-box" id="status-error" style="display:none;">
+      <div class="status-icon-wrap">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--warn)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
       <div>
-        <div class="status-title">Erreur technique</div>
-        <div class="status-desc">L'analyse IA a échoué (quota ou réseau). Réessaie dans quelques secondes.</div>
+        <div class="status-content-title">Erreur technique</div>
+        <div class="status-content-desc">L'analyse IA a rencontré un problème. Réessaie dans quelques secondes.</div>
       </div>
     </div>
 
     <button class="btn btn-primary" id="btn-download" style="display:none;" onclick="downloadFile()">
-      ⬇️ Télécharger le fichier
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Télécharger le fichier
     </button>
 
     <button class="btn btn-secondary" id="btn-retry" style="display:none; margin-top:10px;" onclick="retryUpload()">
-      🔄 Renvoyer une capture
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+      Renvoyer une capture
     </button>
 
-    <!-- Détails session -->
-    <div id="session-info" style="display:none; margin-top:16px;">
-      <div class="info-row">
-        <span class="label">Session ID</span>
-        <span class="value" id="display-session">—</span>
+    <div class="info-grid" id="session-info" style="display:none;">
+      <div class="info-cell">
+        <div class="info-cell-label">Session</div>
+        <div class="info-cell-value" id="display-session">—</div>
       </div>
-      <div class="info-row">
-        <span class="label">Statut</span>
-        <span class="value" id="display-status">En attente</span>
+      <div class="info-cell">
+        <div class="info-cell-label">Statut</div>
+        <div class="info-cell-value" id="display-status">En attente</div>
       </div>
+    </div>
+  </div>
+
+  <!-- ── Footer badges ── -->
+  <div class="security-row">
+    <div class="sec-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Paiement sécurisé
+    </div>
+    <div class="sec-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      Accès instantané
+    </div>
+    <div class="sec-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+      Données protégées
     </div>
   </div>
 
@@ -483,40 +872,35 @@
   let pollInterval = null;
   let selectedFile = null;
 
-  // ── Étape 1 : Lancer le paiement ──
   async function startPayment() {
     const btn = document.getElementById('btn-pay');
     btn.disabled = true;
-    btn.innerHTML = '⏳ Initialisation...';
+    btn.innerHTML = '<div class="spinner" style="border-top-color:#fff; width:16px; height:16px; margin:0;"></div> Initialisation…';
 
     try {
-      const res = await fetch('/api/session/create', { method: 'POST' });
+      const res  = await fetch('/api/session/create', { method: 'POST' });
       const data = await res.json();
-      sessionId = data.sessionId;
+      sessionId  = data.sessionId;
 
-      // Composer le code USSD via le téléphone
-      const ussd = encodeURIComponent(decodeURIComponent(data.ussdCode));
       window.location.href = `tel:${data.ussdCode}`;
 
-      // Passer à l'étape 2 après un délai
       setTimeout(() => {
         activateStep(2);
-        btn.innerHTML = '✅ Paiement lancé';
+        btn.innerHTML = '✓ Paiement lancé';
       }, 1500);
 
     } catch (e) {
       btn.disabled = false;
-      btn.innerHTML = '📱 Payer via MVola / Orange Money';
+      btn.innerHTML = 'Payer via MVola / Orange Money';
       showError('Erreur de connexion au serveur');
     }
   }
 
-  // ── Gestion du fichier uploadé ──
   function handleFile(input) {
     const file = input.files[0];
     if (!file) return;
-
     selectedFile = file;
+
     const reader = new FileReader();
     reader.onload = (e) => {
       const preview = document.getElementById('preview');
@@ -528,10 +912,9 @@
     document.getElementById('btn-submit').disabled = false;
   }
 
-  // Drag & drop
   const zone = document.getElementById('upload-zone');
-  zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('dragover'); });
-  zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+  zone.addEventListener('dragover',  (e) => { e.preventDefault(); zone.classList.add('dragover'); });
+  zone.addEventListener('dragleave', ()  => zone.classList.remove('dragover'));
   zone.addEventListener('drop', (e) => {
     e.preventDefault();
     zone.classList.remove('dragover');
@@ -542,20 +925,18 @@
     }
   });
 
-  // ── Étape 2 : Soumettre la preuve ──
   async function submitProof() {
     if (!selectedFile || !sessionId) return;
-
     const btn = document.getElementById('btn-submit');
     btn.disabled = true;
-    btn.innerHTML = '📤 Envoi en cours...';
+    btn.innerHTML = '<div class="spinner" style="border-top-color:#fff; width:16px; height:16px; margin:0;"></div> Envoi en cours…';
 
     const formData = new FormData();
     formData.append('proof', selectedFile);
     formData.append('sessionId', sessionId);
 
     try {
-      const res = await fetch('/api/payment/submit', { method: 'POST', body: formData });
+      const res  = await fetch('/api/payment/submit', { method: 'POST', body: formData });
       const data = await res.json();
 
       if (data.success) {
@@ -564,112 +945,94 @@
       } else {
         showError(data.error || 'Erreur lors de l\'envoi');
         btn.disabled = false;
-        btn.innerHTML = '🤖 Envoyer pour analyse IA';
+        btn.innerHTML = 'Analyser par IA';
       }
     } catch (e) {
       showError('Erreur réseau');
       btn.disabled = false;
-      btn.innerHTML = '🤖 Envoyer pour analyse IA';
+      btn.innerHTML = 'Analyser par IA';
     }
   }
 
-  // ── Étape 3 : Polling du statut ──
   function startPolling() {
     document.getElementById('status-analyzing').style.display = 'flex';
-    document.getElementById('session-info').style.display = 'block';
-    document.getElementById('display-session').textContent = sessionId.slice(-12);
-    document.getElementById('display-status').textContent = 'Analyse IA…';
-    pollInterval = setInterval(checkStatus, 1500); // Gemini répond en 1-3s
+    document.getElementById('session-info').style.display = 'grid';
+    document.getElementById('display-session').textContent = sessionId.slice(-10);
+    document.getElementById('display-status').textContent = 'Analyse…';
+    pollInterval = setInterval(checkStatus, 1500);
   }
 
   async function checkStatus() {
     try {
-      const res = await fetch(`/api/payment/status/${sessionId}`);
+      const res  = await fetch(`/api/payment/status/${sessionId}`);
       const data = await res.json();
-
       document.getElementById('display-status').textContent = data.status;
 
-      if (data.status === 'validated') {
-        clearInterval(pollInterval);
-        showValidated();
-      } else if (data.status === 'rejected') {
-        clearInterval(pollInterval);
-        showRejected();
-      } else if (data.status === 'error') {
-        clearInterval(pollInterval);
-        showError_technical();
-      }
-    } catch (e) {
-      console.error('Polling error:', e);
-    }
+      if      (data.status === 'validated') { clearInterval(pollInterval); showValidated(); }
+      else if (data.status === 'rejected')  { clearInterval(pollInterval); showRejected(); }
+      else if (data.status === 'error')     { clearInterval(pollInterval); showErrorTech(); }
+    } catch (e) { console.error('Polling error:', e); }
   }
 
   function showValidated() {
     document.getElementById('status-analyzing').style.display = 'none';
     document.getElementById('status-validated').style.display = 'flex';
-    document.getElementById('btn-download').style.display = 'flex';
-    document.getElementById('display-status').textContent = '✅ Validé';
-
-    // Téléchargement automatique après 1.5s
+    document.getElementById('btn-download').style.display    = 'flex';
+    document.getElementById('display-status').textContent    = '✓ Validé';
     setTimeout(downloadFile, 1500);
   }
 
   function showRejected() {
     document.getElementById('status-analyzing').style.display = 'none';
-    document.getElementById('status-rejected').style.display = 'flex';
-    document.getElementById('btn-retry').style.display = 'flex';
-    document.getElementById('display-status').textContent = '❌ Rejeté';
+    document.getElementById('status-rejected').style.display  = 'flex';
+    document.getElementById('btn-retry').style.display        = 'flex';
+    document.getElementById('display-status').textContent     = '✗ Rejeté';
   }
 
-  function showError_technical() {
+  function showErrorTech() {
     document.getElementById('status-analyzing').style.display = 'none';
-    document.getElementById('status-error').style.display = 'flex';
-    document.getElementById('btn-retry').style.display = 'flex';
-    document.getElementById('display-status').textContent = '⚠️ Erreur';
+    document.getElementById('status-error').style.display     = 'flex';
+    document.getElementById('btn-retry').style.display        = 'flex';
+    document.getElementById('display-status').textContent     = '⚠ Erreur';
   }
 
-  // ── Téléchargement ──
   function downloadFile() {
     window.location.href = `/api/download/${sessionId}`;
   }
 
-  // ── Réessai upload ──
   function retryUpload() {
-    document.getElementById('status-rejected').style.display = 'none';
-    document.getElementById('status-error').style.display = 'none';
+    ['status-rejected','status-error'].forEach(id => document.getElementById(id).style.display = 'none');
     document.getElementById('btn-retry').style.display = 'none';
     activateStep(2);
-    document.getElementById('preview').style.display = 'none';
+    document.getElementById('preview').style.display   = 'none';
     document.getElementById('upload-zone').style.display = 'block';
     document.getElementById('btn-submit').disabled = true;
     selectedFile = null;
   }
 
-  // ── Navigation entre étapes ──
   function activateStep(step) {
     for (let i = 1; i <= 3; i++) {
       const card = document.getElementById(`card-step${i}`);
-      const track = document.getElementById(`track${i}`);
+      const ps   = document.getElementById(`ps${i}`);
+      const sc   = document.getElementById(`sc${i}`);
+
       if (i < step) {
-        card.classList.remove('active', 'dimmed');
-        card.style.opacity = '0.5';
-        track.classList.remove('active');
-        track.classList.add('done');
+        card.classList.remove('active','dimmed');
+        card.style.opacity = '0.55';
+        ps.classList.remove('active'); ps.classList.add('done');
+        sc.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
       } else if (i === step) {
-        card.classList.remove('dimmed');
-        card.classList.add('active');
+        card.classList.remove('dimmed'); card.classList.add('active');
         card.style.opacity = '1';
-        track.classList.add('active');
-        track.classList.remove('done');
+        ps.classList.add('active'); ps.classList.remove('done');
+        sc.textContent = i;
       } else {
-        card.classList.remove('active');
-        card.classList.add('dimmed');
+        card.classList.remove('active'); card.classList.add('dimmed');
         card.style.opacity = '';
-        track.classList.remove('active', 'done');
+        ps.classList.remove('active','done');
+        sc.textContent = i;
       }
     }
-
-    // Scroll vers la carte active
     document.getElementById(`card-step${step}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
