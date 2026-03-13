@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Achat Sécurisé — Fichier Numérique</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --border: #1e1e2e;
+    --accent: #00e5a0;
+    --accent2: #7c3aed;
+    --warn: #f59e0b;
+    --danger: #ef4444;
+    --text: #e8e8f0;
+    --muted: #6b6b80;
+    --glow: 0 0 40px rgba(0,229,160,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(ellipse at 60% 20%, rgba(124,58,237,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 20% 80%, rgba(0,229,160,0.06) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 480px;
+    padding: 24px;
+  }
+
+  /* ── Header ── */
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0,229,160,0.1);
+    border: 1px solid rgba(0,229,160,0.3);
+    border-radius: 100px;
+    padding: 6px 14px;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .badge::before { content: '●'; font-size: 8px; animation: pulse 2s infinite; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  h1 {
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1.1;
+    background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  /* ── Card ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px;
+    margin-bottom: 16px;
+    transition: all 0.3s ease;
+  }
+
+  .card.active {
+    border-color: rgba(0,229,160,0.4);
+    box-shadow: var(--glow);
+  }
+
+  .card.dimmed { opacity: 0.4; pointer-events: none; }
+
+  .step-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+  }
+
+  .step-num {
+    width: 22px; height: 22px;
+    background: var(--border);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    color: var(--muted);
+    flex-shrink: 0;
+    transition: all 0.3s;
+  }
+
+  .active .step-num {
+    background: var(--accent);
+    color: #000;
+  }
+
+  /* Product info */
+  .product-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 12px;
+    margin-bottom: 20px;
+  }
+
+  .product-icon {
+    width: 48px; height: 48px;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  .product-name { font-size: 15px; font-weight: 600; margin-bottom: 3px; }
+
+  .product-price {
+    font-family: 'DM Mono', monospace;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--accent);
+  }
+
+  /* Buttons */
+  .btn {
+    width: 100%;
+    padding: 15px 24px;
+    border-radius: 12px;
+    border: none;
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), #00b87a);
+    color: #000;
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,229,160,0.3); }
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-secondary {
+    background: var(--border);
+    color: var(--text);
+  }
+  .btn-secondary:hover { background: #252535; }
+
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
+
+  /* Upload zone */
+  .upload-zone {
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    padding: 32px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-bottom: 16px;
+    position: relative;
+  }
+
+  .upload-zone:hover, .upload-zone.dragover {
+    border-color: var(--accent);
+    background: rgba(0,229,160,0.05);
+  }
+
+  .upload-zone input {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%;
+  }
+
+  .upload-icon { font-size: 36px; margin-bottom: 10px; }
+  .upload-text { font-size: 14px; color: var(--muted); }
+  .upload-text strong { color: var(--accent); }
+
+  .preview-img {
+    width: 100%;
+    max-height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 16px;
+    display: none;
+  }
+
+  /* Status section */
+  .status-box {
+    padding: 16px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .status-box.analyzing { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); }
+  .status-box.validated { background: rgba(0,229,160,0.1); border: 1px solid rgba(0,229,160,0.3); }
+  .status-box.rejected  { background: rgba(239,68,68,0.1);  border: 1px solid rgba(239,68,68,0.3); }
+
+  .status-icon { font-size: 24px; flex-shrink: 0; }
+
+  .status-title { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+  .status-desc  { font-size: 12px; color: var(--muted); }
+
+  /* Spinner */
+  .spinner {
+    width: 20px; height: 20px;
+    border: 2px solid var(--border);
+    border-top-color: var(--warn);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Progress dots */
+  .dots { display: inline-block; }
+  .dots::after {
+    content: '';
+    animation: dots 1.5s infinite;
+  }
+  @keyframes dots {
+    0%   { content: ''; }
+    33%  { content: '.'; }
+    66%  { content: '..'; }
+    100% { content: '...'; }
+  }
+
+  /* Step indicator */
+  .steps-track {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 28px;
+    justify-content: center;
+  }
+
+  .track-dot {
+    height: 3px;
+    border-radius: 100px;
+    flex: 1;
+    background: var(--border);
+    transition: background 0.3s;
+  }
+
+  .track-dot.done { background: var(--accent); }
+  .track-dot.active { background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+
+  .info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+
+  .info-row:last-child { border-bottom: none; }
+  .info-row .label { color: var(--muted); }
+  .info-row .value { font-family: 'DM Mono', monospace; font-size: 12px; }
+
+  /* Success animation */
+  @keyframes floatUp {
+    0% { transform: translateY(10px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
+
+  .success-card {
+    animation: floatUp 0.5s ease forwards;
+    text-align: center;
+    padding: 32px;
+  }
+
+  .success-checkmark {
+    width: 64px; height: 64px;
+    background: linear-gradient(135deg, var(--accent), #00b87a);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    margin: 0 auto 20px;
+    box-shadow: 0 0 40px rgba(0,229,160,0.4);
+  }
+
+  .error-msg {
+    color: var(--danger);
+    font-size: 12px;
+    margin-top: 8px;
+    font-family: 'DM Mono', monospace;
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="badge">Vérification par IA · Groq Llama 4</div>
+    <h1>Téléchargement<br>Numérique</h1>
+    <p class="subtitle">Payez, prouvez, téléchargez — vérifié par IA</p>
+  </div>
+
+  <!-- Progress track -->
+  <div class="steps-track">
+    <div class="track-dot active" id="track1"></div>
+    <div class="track-dot" id="track2"></div>
+    <div class="track-dot" id="track3"></div>
+  </div>
+
+  <!-- ── STEP 1: Paiement ── -->
+  <div class="card active" id="card-step1">
+    <div class="step-label">
+      <div class="step-num">1</div>
+      Effectuer le paiement
+    </div>
+
+    <div class="product-info">
+      <div class="product-icon">📄</div>
+      <div>
+        <div class="product-name">Fichier Numérique Premium</div>
+        <div class="product-price">5 000 Ar</div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" id="btn-pay" onclick="startPayment()">
+      📱 Payer via MVola / Orange Money
+    </button>
+    <p style="text-align:center; font-size:11px; color:var(--muted); margin-top:10px;">
+      Appuie le bouton — ton téléphone composera automatiquement le code USSD
+    </p>
+  </div>
+
+  <!-- ── STEP 2: Preuve de paiement ── -->
+  <div class="card dimmed" id="card-step2">
+    <div class="step-label">
+      <div class="step-num">2</div>
+      Envoyer la preuve de paiement
+    </div>
+
+    <img id="preview" class="preview-img" src="" alt="Aperçu">
+
+    <div class="upload-zone" id="upload-zone">
+      <input type="file" id="file-input" accept="image/*" onchange="handleFile(this)">
+      <div class="upload-icon">🖼️</div>
+      <div class="upload-text">
+        <strong>Clique ou glisse</strong> ta capture d'écran ici<br>
+        <span style="font-size:11px;">JPG, PNG — max 10MB</span>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" id="btn-submit" onclick="submitProof()" disabled>
+      🤖 Envoyer pour analyse IA
+    </button>
+    <p class="error-msg" id="error-msg"></p>
+  </div>
+
+  <!-- ── STEP 3: Vérification & Téléchargement ── -->
+  <div class="card dimmed" id="card-step3">
+    <div class="step-label">
+      <div class="step-num">3</div>
+      Analyse IA & Téléchargement
+    </div>
+
+    <!-- Statut: analyzing -->
+    <div class="status-box analyzing" id="status-analyzing" style="display:none;">
+      <div class="spinner"></div>
+      <div>
+        <div class="status-title">Analyse IA en cours<span class="dots"></span></div>
+        <div class="status-desc">Groq Llama 4 vérifie ton paiement automatiquement…</div>
+      </div>
+    </div>
+
+    <!-- Statut: validé -->
+    <div class="status-box validated" id="status-validated" style="display:none;">
+      <div class="status-icon">✅</div>
+      <div>
+        <div class="status-title">Paiement confirmé !</div>
+        <div class="status-desc">Ton téléchargement démarre automatiquement…</div>
+      </div>
+    </div>
+
+    <!-- Statut: rejeté -->
+    <div class="status-box rejected" id="status-rejected" style="display:none;">
+      <div class="status-icon">❌</div>
+      <div>
+        <div class="status-title">Paiement non reconnu</div>
+        <div class="status-desc">La capture ne correspond pas. Réessaie avec la bonne image.</div>
+      </div>
+    </div>
+
+    <!-- Statut: erreur technique -->
+    <div class="status-box" id="status-error" style="display:none; background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3);">
+      <div class="status-icon">⚠️</div>
+      <div>
+        <div class="status-title">Erreur technique</div>
+        <div class="status-desc">L'analyse IA a échoué (quota ou réseau). Réessaie dans quelques secondes.</div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" id="btn-download" style="display:none;" onclick="downloadFile()">
+      ⬇️ Télécharger le fichier
+    </button>
+
+    <button class="btn btn-secondary" id="btn-retry" style="display:none; margin-top:10px;" onclick="retryUpload()">
+      🔄 Renvoyer une capture
+    </button>
+
+    <!-- Détails session -->
+    <div id="session-info" style="display:none; margin-top:16px;">
+      <div class="info-row">
+        <span class="label">Session ID</span>
+        <span class="value" id="display-session">—</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Statut</span>
+        <span class="value" id="display-status">En attente</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let sessionId = null;
+  let pollInterval = null;
+  let selectedFile = null;
+
+  // ── Étape 1 : Lancer le paiement ──
+  async function startPayment() {
+    const btn = document.getElementById('btn-pay');
+    btn.disabled = true;
+    btn.innerHTML = '⏳ Initialisation...';
+
+    try {
+      const res = await fetch('/api/session/create', { method: 'POST' });
+      const data = await res.json();
+      sessionId = data.sessionId;
+
+      // Composer le code USSD via le téléphone
+      const ussd = encodeURIComponent(decodeURIComponent(data.ussdCode));
+      window.location.href = `tel:${data.ussdCode}`;
+
+      // Passer à l'étape 2 après un délai
+      setTimeout(() => {
+        activateStep(2);
+        btn.innerHTML = '✅ Paiement lancé';
+      }, 1500);
+
+    } catch (e) {
+      btn.disabled = false;
+      btn.innerHTML = '📱 Payer via MVola / Orange Money';
+      showError('Erreur de connexion au serveur');
+    }
+  }
+
+  // ── Gestion du fichier uploadé ──
+  function handleFile(input) {
+    const file = input.files[0];
+    if (!file) return;
+
+    selectedFile = file;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const preview = document.getElementById('preview');
+      preview.src = e.target.result;
+      preview.style.display = 'block';
+      document.getElementById('upload-zone').style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+    document.getElementById('btn-submit').disabled = false;
+  }
+
+  // Drag & drop
+  const zone = document.getElementById('upload-zone');
+  zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('dragover'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+  zone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    zone.classList.remove('dragover');
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      document.getElementById('file-input').files = e.dataTransfer.files;
+      handleFile(document.getElementById('file-input'));
+    }
+  });
+
+  // ── Étape 2 : Soumettre la preuve ──
+  async function submitProof() {
+    if (!selectedFile || !sessionId) return;
+
+    const btn = document.getElementById('btn-submit');
+    btn.disabled = true;
+    btn.innerHTML = '📤 Envoi en cours...';
+
+    const formData = new FormData();
+    formData.append('proof', selectedFile);
+    formData.append('sessionId', sessionId);
+
+    try {
+      const res = await fetch('/api/payment/submit', { method: 'POST', body: formData });
+      const data = await res.json();
+
+      if (data.success) {
+        activateStep(3);
+        startPolling();
+      } else {
+        showError(data.error || 'Erreur lors de l\'envoi');
+        btn.disabled = false;
+        btn.innerHTML = '🤖 Envoyer pour analyse IA';
+      }
+    } catch (e) {
+      showError('Erreur réseau');
+      btn.disabled = false;
+      btn.innerHTML = '🤖 Envoyer pour analyse IA';
+    }
+  }
+
+  // ── Étape 3 : Polling du statut ──
+  function startPolling() {
+    document.getElementById('status-analyzing').style.display = 'flex';
+    document.getElementById('session-info').style.display = 'block';
+    document.getElementById('display-session').textContent = sessionId.slice(-12);
+    document.getElementById('display-status').textContent = 'Analyse IA…';
+    pollInterval = setInterval(checkStatus, 1500); // Gemini répond en 1-3s
+  }
+
+  async function checkStatus() {
+    try {
+      const res = await fetch(`/api/payment/status/${sessionId}`);
+      const data = await res.json();
+
+      document.getElementById('display-status').textContent = data.status;
+
+      if (data.status === 'validated') {
+        clearInterval(pollInterval);
+        showValidated();
+      } else if (data.status === 'rejected') {
+        clearInterval(pollInterval);
+        showRejected();
+      } else if (data.status === 'error') {
+        clearInterval(pollInterval);
+        showError_technical();
+      }
+    } catch (e) {
+      console.error('Polling error:', e);
+    }
+  }
+
+  function showValidated() {
+    document.getElementById('status-analyzing').style.display = 'none';
+    document.getElementById('status-validated').style.display = 'flex';
+    document.getElementById('btn-download').style.display = 'flex';
+    document.getElementById('display-status').textContent = '✅ Validé';
+
+    // Téléchargement automatique après 1.5s
+    setTimeout(downloadFile, 1500);
+  }
+
+  function showRejected() {
+    document.getElementById('status-analyzing').style.display = 'none';
+    document.getElementById('status-rejected').style.display = 'flex';
+    document.getElementById('btn-retry').style.display = 'flex';
+    document.getElementById('display-status').textContent = '❌ Rejeté';
+  }
+
+  function showError_technical() {
+    document.getElementById('status-analyzing').style.display = 'none';
+    document.getElementById('status-error').style.display = 'flex';
+    document.getElementById('btn-retry').style.display = 'flex';
+    document.getElementById('display-status').textContent = '⚠️ Erreur';
+  }
+
+  // ── Téléchargement ──
+  function downloadFile() {
+    window.location.href = `/api/download/${sessionId}`;
+  }
+
+  // ── Réessai upload ──
+  function retryUpload() {
+    document.getElementById('status-rejected').style.display = 'none';
+    document.getElementById('status-error').style.display = 'none';
+    document.getElementById('btn-retry').style.display = 'none';
+    activateStep(2);
+    document.getElementById('preview').style.display = 'none';
+    document.getElementById('upload-zone').style.display = 'block';
+    document.getElementById('btn-submit').disabled = true;
+    selectedFile = null;
+  }
+
+  // ── Navigation entre étapes ──
+  function activateStep(step) {
+    for (let i = 1; i <= 3; i++) {
+      const card = document.getElementById(`card-step${i}`);
+      const track = document.getElementById(`track${i}`);
+      if (i < step) {
+        card.classList.remove('active', 'dimmed');
+        card.style.opacity = '0.5';
+        track.classList.remove('active');
+        track.classList.add('done');
+      } else if (i === step) {
+        card.classList.remove('dimmed');
+        card.classList.add('active');
+        card.style.opacity = '1';
+        track.classList.add('active');
+        track.classList.remove('done');
+      } else {
+        card.classList.remove('active');
+        card.classList.add('dimmed');
+        card.style.opacity = '';
+        track.classList.remove('active', 'done');
+      }
+    }
+
+    // Scroll vers la carte active
+    document.getElementById(`card-step${step}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  function showError(msg) {
+    const el = document.getElementById('error-msg');
+    el.textContent = '⚠ ' + msg;
+    el.style.display = 'block';
+    setTimeout(() => el.style.display = 'none', 5000);
+  }
+</script>
+</body>
+</html>
