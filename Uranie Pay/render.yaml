@@ -1,9 +1,0 @@
-services:
-  - type: web
-    name: paiement-numerique
-    env: node
-    buildCommand: npm install
-    startCommand: node server.js
-    envVars:
-      - key: GROQ_API_KEY
-        sync: false
