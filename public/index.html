@@ -606,69 +606,212 @@
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  .card { animation: fadeUp 0.4s ease both; }
-  .card:nth-child(1) { animation-delay: 0.05s; }
-  .card:nth-child(2) { animation-delay: 0.12s; }
-  .card:nth-child(3) { animation-delay: 0.2s; }
+  /* ── Modal overlay ── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(2, 8, 18, 0.85);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 100;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    padding: 0 12px 24px;
+  }
 
-  /* ── Responsive ── */
+  .modal-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
 
-  /* Tablette (≤600px) */
+  .modal {
+    background: #0d2540;
+    border: 1px solid rgba(55,138,221,0.3);
+    border-radius: 24px 24px 20px 20px;
+    width: 100%;
+    max-width: 480px;
+    padding: 28px 24px 24px;
+    transform: translateY(40px);
+    transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    position: relative;
+    box-shadow: 0 -8px 60px rgba(4,17,31,0.8), 0 1px 0 rgba(55,138,221,0.15) inset;
+  }
+
+  .modal-overlay.open .modal {
+    transform: translateY(0);
+  }
+
+  .modal-handle {
+    width: 36px; height: 4px;
+    background: rgba(55,138,221,0.3);
+    border-radius: 100px;
+    margin: 0 auto 24px;
+  }
+
+  .modal-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+    text-align: center;
+  }
+
+  .modal-subtitle {
+    font-size: 12px;
+    color: var(--muted);
+    text-align: center;
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
+
+  .modal-amount {
+    display: inline-block;
+    background: rgba(55,138,221,0.12);
+    border: 1px solid rgba(55,138,221,0.2);
+    border-radius: 8px;
+    padding: 2px 10px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent2);
+  }
+
+  /* ── Operator buttons ── */
+  .operator-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .operator-btn {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    padding: 16px 18px;
+    border-radius: 14px;
+    border: 1px solid rgba(55,138,221,0.15);
+    background: rgba(55,138,221,0.05);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    color: var(--text);
+  }
+
+  .operator-btn:hover {
+    transform: translateY(-1px);
+    border-color: rgba(55,138,221,0.4);
+    background: rgba(55,138,221,0.1);
+  }
+
+  .operator-btn:active { transform: translateY(0); }
+
+  .operator-btn.mvola   { --op-color: #e8303a; }
+  .operator-btn.orange  { --op-color: #f97316; }
+  .operator-btn.airtel  { --op-color: #e11d48; }
+
+  .operator-btn:hover { border-color: rgba(var(--op-color-rgb, 55,138,221), 0.5); }
+
+  .operator-logo {
+    width: 46px; height: 46px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    flex-shrink: 0;
+    letter-spacing: -0.02em;
+  }
+
+  .mvola  .operator-logo { background: linear-gradient(135deg, #c0121c, #e8303a); color: #fff; }
+  .orange .operator-logo { background: linear-gradient(135deg, #c2530a, #f97316); color: #fff; }
+  .airtel .operator-logo { background: linear-gradient(135deg, #9b0e2a, #e11d48); color: #fff; }
+
+  .operator-info { flex: 1; text-align: left; }
+
+  .operator-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 3px;
+  }
+
+  .operator-ussd {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.02em;
+  }
+
+  .operator-arrow {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    background: rgba(55,138,221,0.1);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.2s;
+  }
+
+  .operator-btn:hover .operator-arrow { background: rgba(55,138,221,0.2); }
+
+  .modal-close {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .modal-close:hover { background: rgba(55,138,221,0.06); color: var(--text); }
+
+  /* ── Responsive modal ── */
   @media (max-width: 600px) {
     body { padding: 32px 12px 64px; }
-
     h1 { font-size: 28px; }
     .subtitle { font-size: 13px; }
-
     .logo-wrap { width: 54px; height: 54px; border-radius: 14px; margin-bottom: 18px; }
     .header { margin-bottom: 32px; }
-
     .card { padding: 20px 18px; border-radius: 16px; }
-
     .product-box { gap: 12px; padding: 13px; }
     .product-icon-wrap { width: 44px; height: 44px; border-radius: 11px; flex-shrink: 0; }
     .product-name { font-size: 13px; }
     .product-price { font-size: 18px; }
-
     .btn { padding: 13px 18px; font-size: 13px; }
-
     .security-row { gap: 12px; flex-wrap: wrap; }
     .sec-badge { font-size: 10px; }
+    .modal { padding: 20px 16px 16px; border-radius: 20px 20px 16px 16px; }
   }
 
-  /* Mobile (≤400px) */
   @media (max-width: 400px) {
     body { padding: 24px 10px 56px; }
-
     h1 { font-size: 24px; }
     .badge { font-size: 10px; padding: 4px 11px; }
-
     .card { padding: 16px 14px; }
-
-    /* Product box passe en colonne sur très petit écran */
-    .product-box {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
-    }
+    .product-box { flex-direction: column; align-items: flex-start; gap: 10px; }
     .product-price { align-self: flex-end; }
-
     .step-label-text { font-size: 9px; }
     .step-circle { width: 26px; height: 26px; font-size: 10px; }
     .progress-step::after { top: 13px; }
-
-    .security-row {
-      flex-direction: column;
-      gap: 10px;
-      align-items: flex-start;
-      padding-left: 8px;
-    }
-
+    .security-row { flex-direction: column; gap: 10px; align-items: flex-start; padding-left: 8px; }
     .info-grid { grid-template-columns: 1fr; }
-
     .upload-zone { padding: 24px 14px; }
     .upload-icon-wrap { width: 40px; height: 40px; }
     .upload-title { font-size: 13px; }
+    .operator-btn { padding: 13px 14px; gap: 12px; }
+    .operator-logo { width: 40px; height: 40px; font-size: 10px; }
   }
 </style>
 </head>
@@ -730,17 +873,16 @@
         <div class="product-desc">Accès instantané après paiement</div>
       </div>
       <div class="product-price">
-        5 000
-        <span>Ariary</span>
+        <span class="js-amount">5 000 Ar</span>
       </div>
     </div>
 
-    <button class="btn btn-primary" id="btn-pay" onclick="startPayment()">
+    <button class="btn btn-primary" id="btn-pay" onclick="openModal()">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18"/></svg>
-      Payer via MVola / Orange Money
+      Choisir mon opérateur &amp; Payer
     </button>
     <p style="text-align:center; font-size:11px; color:var(--muted2); margin-top:10px; line-height:1.5;">
-      Le code USSD sera composé automatiquement sur votre téléphone
+      MVola · Orange Money · Airtel Money — le code USSD est composé automatiquement
     </p>
   </div>
 
@@ -867,35 +1009,147 @@
 
 </div>
 
+<!-- ── Modal choix opérateur ── -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
+  <div class="modal" id="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Choisir votre opérateur</div>
+    <div class="modal-subtitle">
+      Montant à payer : <span class="modal-amount js-amount">5 000 Ar</span><br>
+      Sélectionnez votre réseau — l'app téléphone s'ouvre automatiquement
+    </div>
+
+    <div class="operator-list">
+
+      <!-- MVola (Telma) -->
+      <a class="operator-btn mvola" id="btn-mvola" href="#" onclick="selectOperator('mvola', event)">
+        <div class="operator-logo">MV</div>
+        <div class="operator-info">
+          <div class="operator-name">MVola <span style="font-size:11px; font-weight:400; color:var(--muted);">— Telma</span></div>
+          <div class="operator-ussd" id="ussd-mvola">*111*1*4*03XXXXXXXX*5000#</div>
+        </div>
+        <div class="operator-arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.1 1.18 2 2 0 012.11 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+        </div>
+      </a>
+
+      <!-- Orange Money -->
+      <a class="operator-btn orange" id="btn-orange" href="#" onclick="selectOperator('orange', event)">
+        <div class="operator-logo">OM</div>
+        <div class="operator-info">
+          <div class="operator-name">Orange Money <span style="font-size:11px; font-weight:400; color:var(--muted);">— Orange</span></div>
+          <div class="operator-ussd" id="ussd-orange">*144*1*1*03XXXXXXXX*5000#</div>
+        </div>
+        <div class="operator-arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.1 1.18 2 2 0 012.11 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+        </div>
+      </a>
+
+      <!-- Airtel Money -->
+      <a class="operator-btn airtel" id="btn-airtel" href="#" onclick="selectOperator('airtel', event)">
+        <div class="operator-logo">AM</div>
+        <div class="operator-info">
+          <div class="operator-name">Airtel Money <span style="font-size:11px; font-weight:400; color:var(--muted);">— Airtel</span></div>
+          <div class="operator-ussd" id="ussd-airtel">*454*1*03XXXXXXXX*5000#</div>
+        </div>
+        <div class="operator-arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.1 1.18 2 2 0 012.11 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+        </div>
+      </a>
+
+    </div>
+
+    <button class="modal-close" onclick="closeModal()">Annuler</button>
+  </div>
+</div>
+
 <script>
-  let sessionId = null;
+  // ── Config chargée depuis le serveur ──────────────────────────────────────
+  let OPERATORS = {};
+  let AMOUNT    = '5000';
+
+  async function loadConfig() {
+    try {
+      const res  = await fetch('/api/config');
+      const data = await res.json();
+      OPERATORS  = data.operators;
+      AMOUNT     = data.amount;
+
+      // Met à jour le prix affiché
+      document.querySelectorAll('.js-amount').forEach(el => el.textContent = Number(AMOUNT).toLocaleString('fr-FR') + ' Ar');
+
+      // Met à jour les codes USSD affichés dans le modal
+      for (const [key, op] of Object.entries(OPERATORS)) {
+        const el = document.getElementById(`ussd-${key}`);
+        if (el) el.textContent = op.ussd.replace(/%23/g, '#');
+      }
+    } catch (e) {
+      console.error('Erreur chargement config:', e);
+    }
+  }
+
+  loadConfig();
+
+  // ── État global ───────────────────────────────────────────────────────────
+  let sessionId    = null;
   let pollInterval = null;
   let selectedFile = null;
 
-  async function startPayment() {
-    const btn = document.getElementById('btn-pay');
-    btn.disabled = true;
-    btn.innerHTML = '<div class="spinner" style="border-top-color:#fff; width:16px; height:16px; margin:0;"></div> Initialisation…';
+  // ── Modal ─────────────────────────────────────────────────────────────────
+  function openModal() {
+    document.getElementById('modal-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('modal-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function closeModalOutside(e) {
+    if (e.target === document.getElementById('modal-overlay')) closeModal();
+  }
+
+  // Fermer avec Escape
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+  // ── Sélection opérateur → lancer paiement ────────────────────────────────
+  async function selectOperator(op, event) {
+    event.preventDefault();
+    if (!OPERATORS[op]) return;
+    const btn = document.getElementById(`btn-${op}`);
+
+    // Feedback visuel
+    btn.style.opacity = '0.6';
+    btn.style.pointerEvents = 'none';
 
     try {
       const res  = await fetch('/api/session/create', { method: 'POST' });
       const data = await res.json();
       sessionId  = data.sessionId;
 
-      window.location.href = `tel:${data.ussdCode}`;
+      // Ouvre l'app téléphone avec le bon code USSD
+      window.location.href = `tel:${OPERATORS[op].ussd}`;
 
-      setTimeout(() => {
-        activateStep(2);
-        btn.innerHTML = '✓ Paiement lancé';
-      }, 1500);
+      closeModal();
+
+      // Met à jour le bouton principal
+      const mainBtn = document.getElementById('btn-pay');
+      mainBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Paiement ${OPERATORS[op].label} lancé`;
+      mainBtn.disabled = true;
+
+      // Passe à l'étape 2 après 1.5s
+      setTimeout(() => activateStep(2), 1500);
 
     } catch (e) {
-      btn.disabled = false;
-      btn.innerHTML = 'Payer via MVola / Orange Money';
+      btn.style.opacity = '';
+      btn.style.pointerEvents = '';
+      closeModal();
       showError('Erreur de connexion au serveur');
     }
   }
 
+  // ── Upload fichier ────────────────────────────────────────────────────────
   function handleFile(input) {
     const file = input.files[0];
     if (!file) return;
@@ -925,6 +1179,7 @@
     }
   });
 
+  // ── Soumettre capture ─────────────────────────────────────────────────────
   async function submitProof() {
     if (!selectedFile || !sessionId) return;
     const btn = document.getElementById('btn-submit');
@@ -954,11 +1209,12 @@
     }
   }
 
+  // ── Polling statut ────────────────────────────────────────────────────────
   function startPolling() {
     document.getElementById('status-analyzing').style.display = 'flex';
-    document.getElementById('session-info').style.display = 'grid';
-    document.getElementById('display-session').textContent = sessionId.slice(-10);
-    document.getElementById('display-status').textContent = 'Analyse…';
+    document.getElementById('session-info').style.display     = 'grid';
+    document.getElementById('display-session').textContent    = sessionId.slice(-10);
+    document.getElementById('display-status').textContent     = 'Analyse…';
     pollInterval = setInterval(checkStatus, 1500);
   }
 
@@ -977,8 +1233,8 @@
   function showValidated() {
     document.getElementById('status-analyzing').style.display = 'none';
     document.getElementById('status-validated').style.display = 'flex';
-    document.getElementById('btn-download').style.display    = 'flex';
-    document.getElementById('display-status').textContent    = '✓ Validé';
+    document.getElementById('btn-download').style.display     = 'flex';
+    document.getElementById('display-status').textContent     = '✓ Validé';
     setTimeout(downloadFile, 1500);
   }
 
@@ -1004,12 +1260,13 @@
     ['status-rejected','status-error'].forEach(id => document.getElementById(id).style.display = 'none');
     document.getElementById('btn-retry').style.display = 'none';
     activateStep(2);
-    document.getElementById('preview').style.display   = 'none';
-    document.getElementById('upload-zone').style.display = 'block';
-    document.getElementById('btn-submit').disabled = true;
+    document.getElementById('preview').style.display      = 'none';
+    document.getElementById('upload-zone').style.display  = 'block';
+    document.getElementById('btn-submit').disabled        = true;
     selectedFile = null;
   }
 
+  // ── Navigation étapes ─────────────────────────────────────────────────────
   function activateStep(step) {
     for (let i = 1; i <= 3; i++) {
       const card = document.getElementById(`card-step${i}`);
