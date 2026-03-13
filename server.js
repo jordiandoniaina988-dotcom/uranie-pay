@@ -15,7 +15,7 @@ app.use(express.static('public'));
 // ─── Configuration ───────────────────────────────────────────────────────────
 const CONFIG = {
   GROQ_API_KEY:    process.env.GROQ_API_KEY    || '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',
-  FILE_TO_DELIVER: './protected/fichier_numerique.pdf',
+  FILE_TO_DELIVER: './protected/Boosteo.apk',
 
   // ↓ Montant exact attendu (en Ariary)
   PAYMENT_AMOUNT:  process.env.PAYMENT_AMOUNT  || '101900',
