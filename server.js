@@ -14,10 +14,23 @@ app.use(express.static('public'));
 
 // ─── Configuration ───────────────────────────────────────────────────────────
 const CONFIG = {
-  GROQ_API_KEY:    process.env.GROQ_API_KEY || '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', // ← Clé API Groq (console.groq.com)
-  FILE_TO_DELIVER: './protected/Boosteo.apk',              // ← Ton fichier à livrer
-  PAYMENT_AMOUNT:  '101900',                                           // ← Montant exact attendu en Ar
-  USSD_CODE:       '*144*1*1*0340000000*5000%23',                    // ← Code USSD MVola/Orange Money
+  GROQ_API_KEY:    process.env.GROQ_API_KEY    || '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',
+  FILE_TO_DELIVER: './protected/fichier_numerique.pdf',
+
+  // ↓ Montant exact attendu (en Ariary)
+  PAYMENT_AMOUNT:  process.env.PAYMENT_AMOUNT  || '101900',
+
+  // ↓ Tes numéros de réception par opérateur
+  MVOLA_NUMBER:    process.env.MVOLA_NUMBER    || '0388128244',
+  ORANGE_NUMBER:   process.env.ORANGE_NUMBER   || '0324578914',
+  AIRTEL_NUMBER:   process.env.AIRTEL_NUMBER   || '0338222459',
+};
+
+// Codes USSD construits dynamiquement à partir des variables
+const USSD = {
+  mvola:  `*111*1*4*${CONFIG.MVOLA_NUMBER}*${CONFIG.PAYMENT_AMOUNT}%23`,
+  orange: `*144*1*1*${CONFIG.ORANGE_NUMBER}*${CONFIG.PAYMENT_AMOUNT}%23`,
+  airtel: `*454*1*${CONFIG.AIRTEL_NUMBER}*${CONFIG.PAYMENT_AMOUNT}%23`,
 };
 
 // ─── Initialisation Groq (gratuit, 14 400 requêtes/jour) ─────────────────────
@@ -86,6 +99,18 @@ async function analyzePaymentProof(imagePath, mimeType) {
 
 // ─── Routes API ──────────────────────────────────────────────────────────────
 
+// 0. Config publique → utilisée par le frontend pour afficher prix et codes USSD
+app.get('/api/config', (req, res) => {
+  res.json({
+    amount:  CONFIG.PAYMENT_AMOUNT,
+    operators: {
+      mvola:  { label: 'MVola',        ussd: USSD.mvola,  number: CONFIG.MVOLA_NUMBER  },
+      orange: { label: 'Orange Money', ussd: USSD.orange, number: CONFIG.ORANGE_NUMBER },
+      airtel: { label: 'Airtel Money', ussd: USSD.airtel, number: CONFIG.AIRTEL_NUMBER },
+    },
+  });
+});
+
 // 1. Créer une session de paiement
 app.post('/api/session/create', (req, res) => {
   const sessionId = `sess_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -94,7 +119,7 @@ app.post('/api/session/create', (req, res) => {
     timestamp: Date.now(),
   });
   console.log(`🆕 Session créée : ${sessionId}`);
-  res.json({ sessionId, ussdCode: CONFIG.USSD_CODE });
+  res.json({ sessionId });
 });
 
 // 2. Soumettre la capture → analyse automatique par Gemini
@@ -207,11 +232,18 @@ app.listen(PORT, () => {
   console.log(`📁 Fichier à livrer : ${CONFIG.FILE_TO_DELIVER}`);
   console.log(`🤖 IA d'analyse     : Groq — Llama 4 Scout Vision (gratuit)`);
   console.log(`💰 Montant attendu  : ${CONFIG.PAYMENT_AMOUNT} Ar`);
+  console.log(`📱 MVola            : ${CONFIG.MVOLA_NUMBER}`);
+  console.log(`📱 Orange Money     : ${CONFIG.ORANGE_NUMBER}`);
+  console.log(`📱 Airtel Money     : ${CONFIG.AIRTEL_NUMBER}`);
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
 
   if (CONFIG.GROQ_API_KEY === 'COLLE_TA_CLE_ICI') {
     console.warn('⚠️  GROQ_API_KEY non configurée !');
     console.warn('   → Obtiens ta clé gratuite sur https://console.groq.com');
     console.warn('   → Puis lance : GROQ_API_KEY=ta_cle node server.js');
+  }
+  if (CONFIG.MVOLA_NUMBER.includes('X') || CONFIG.ORANGE_NUMBER.includes('X') || CONFIG.AIRTEL_NUMBER.includes('X')) {
+    console.warn('⚠️  Numéros opérateurs non configurés !');
+    console.warn('   → Ajoute MVOLA_NUMBER, ORANGE_NUMBER, AIRTEL_NUMBER dans les variables d\'environnement');
   }
 });
